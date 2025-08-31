@@ -1,4 +1,5 @@
 const ERROR_CODE_BAD_REQUEST = 400;
+const ERROR_CODE_FORBIDDEN = 403;
 const ERROR_CODE_NOT_FOUND = 404;
 const ERROR_CODE_SERVER = 500;
 
@@ -17,7 +18,13 @@ function errorHandler(err, req, res, next) {
 
   if (err.name === "NotFound") {
     return res.status(ERROR_CODE_NOT_FOUND).send({
-      message: "Recurso não encontrado.",
+      message: err.message || "Recurso não encontrado.",
+    });
+  }
+
+  if (err.name === "Forbidden") {
+    return res.status(ERROR_CODE_FORBIDDEN).send({
+      message: err.message || "Ação não permitida.",
     });
   }
 

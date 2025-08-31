@@ -32,11 +32,13 @@
     "celebrate": "^15.0.3",
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "express-winston": "^4.2.0",
     "install": "^0.13.0",
     "joi": "^18.0.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.1",
     "validator": "^13.15.15",
-    "vnpm": "^1.0.76"
+    "vnpm": "^1.0.76",
+    "winston": "^3.17.0"
   }
 }

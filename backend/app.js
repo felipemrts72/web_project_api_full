@@ -1,8 +1,8 @@
-// app.js
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const errorHandler = require("./middlewares/errorHandler");
+const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -21,12 +21,11 @@ app.use(cors());
 // Conexão com MongoDB
 mongoose
   .connect("mongodb://localhost:27017/aroundb")
-  .then(() => {
-    console.log("Conexão com MongoDB estabelecida com sucesso!");
-  })
-  .catch((err) => {
-    console.error("Erro ao conectar ao MongoDB:", err.message);
-  });
+  .then(() => console.log("Conexão com MongoDB estabelecida com sucesso!"))
+  .catch((err) => console.error("Erro ao conectar ao MongoDB:", err.message));
+
+// Logger de requisições
+app.use(requestLogger);
 
 // Rotas públicas
 app.post("/signup", createUser);
@@ -36,7 +35,7 @@ app.post("/signin", login);
 app.use("/users", auth, usersRouter);
 app.use("/cards", auth, cardsRouter);
 
-// Rota de crash test (para simular falha do servidor)
+// Rota de crash test
 app.get("/crash-test", () => {
   setTimeout(() => {
     throw new Error("O servidor travará agora");
@@ -50,7 +49,10 @@ app.use((req, res, next) => {
   next(err);
 });
 
-// Middleware de tratamento de erros
+// Logger de erros
+app.use(errorLogger);
+
+// Middleware de tratamento de erros centralizado
 app.use(errorHandler);
 
 // Inicia o servidor

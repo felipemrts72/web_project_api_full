@@ -1,43 +1,67 @@
 const { Card } = require("../models/Card");
+const { createCardSchema } = require("../validations/cardValidation");
 
-async function getCards() {
+// GET todos os cards
+module.exports.getCards = async (req, res, next) => {
   try {
-    const cards = await Card.find();
-    return cards;
+    const cards = await Card.find({});
+    res.json(cards);
   } catch (err) {
-    console.error(`ERROR - [DBGET] Cards - ${err.message}`);
-    throw err;
+    next(err);
   }
-}
+};
 
-async function deleteCard(id) {
+// POST criar card com validação
+module.exports.createCard = async (req, res, next) => {
   try {
-    const deleted = await Card.findByIdAndDelete({ _id: id }).orFail(() => {
+    const { error, value } = createCardSchema.validate(req.body);
+    if (error) {
+      error.name = "ValidationError";
+      throw error;
+    }
+
+    const { name, link } = value;
+    const owner = req.user._id;
+
+    const newCard = await Card.create({ name, link, owner });
+    res.status(201).json(newCard);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// DELETE card (verifica se é dono)
+module.exports.deleteCard = async (req, res, next) => {
+  const cardId = req.params.id;
+  const userId = req.user._id;
+
+  try {
+    const card = await Card.findById(cardId).orFail(() => {
       const err = new Error("Cartão não encontrado");
       err.name = "NotFound";
       throw err;
     });
 
-    return deleted;
-  } catch (err) {
-    console.error(`ERROR - [DBGET] Card-ID - ${err.message}`);
-    throw err;
-  }
-}
+    if (card.owner.toString() !== userId) {
+      const err = new Error("Você não pode deletar este cartão");
+      err.name = "Forbidden";
+      throw err;
+    }
 
-async function createCard({ name, link, id }) {
-  try {
-    const newCard = await Card({ name, link, owner: id });
-    const createdCard = await newCard.save();
-    return createdCard;
+    await card.deleteOne();
+    res
+      .status(200)
+      .json({ message: `Cartão - ${cardId} - deletado com sucesso!` });
   } catch (err) {
-    console.error(`ERROR - [DBCREATE] Card - ${err.message}`);
-    err.name = "ValidationError";
-    throw err;
+    next(err);
   }
-}
+};
 
-async function likeCard({ userId, cardId }) {
+// PUT like card
+module.exports.likeCard = async (req, res, next) => {
+  const cardId = req.params.cardId;
+  const userId = req.user._id;
+
   try {
     const card = await Card.findById(cardId).orFail(() => {
       const err = new Error("Cartão não encontrado");
@@ -51,24 +75,19 @@ async function likeCard({ userId, cardId }) {
       throw err;
     }
 
-    const updatedCard = await Card.findByIdAndUpdate(
-      cardId,
-      { $addToSet: { likes: userId } },
-      { new: true },
-    ).orFail(() => {
-      const err = new Error("Cartão não encontrado");
-      err.name = "NotFound";
-      throw err;
-    });
-
-    return updatedCard;
+    card.likes.addToSet(userId);
+    const updatedCard = await card.save();
+    res.json(updatedCard);
   } catch (err) {
-    console.error(`ERROR - [DBUPDT] LIKE-Card - ${err.message}`);
-    throw err;
+    next(err);
   }
-}
+};
 
-async function dislikeCard({ userId, cardId }) {
+// DELETE dislike card
+module.exports.dislikeCard = async (req, res, next) => {
+  const cardId = req.params.cardId;
+  const userId = req.user._id;
+
   try {
     const card = await Card.findById(cardId).orFail(() => {
       const err = new Error("Cartão não encontrado");
@@ -82,20 +101,10 @@ async function dislikeCard({ userId, cardId }) {
       throw err;
     }
 
-    const updatedCard = await Card.findByIdAndUpdate(
-      cardId,
-      { $pull: { likes: userId } },
-      { new: true },
-    ).orFail(() => {
-      const err = new Error("Cartão não encontrado");
-      err.name = "NotFound";
-      throw err;
-    });
-    return updatedCard;
+    card.likes.pull(userId);
+    const updatedCard = await card.save();
+    res.json(updatedCard);
   } catch (err) {
-    console.error(`ERROR - [DBUPDT] DISLIKE-CARD - ${err.message}`);
-    throw err;
+    next(err);
   }
-}
-
-module.exports = { getCards, deleteCard, createCard, likeCard, dislikeCard };
+};
