@@ -12,6 +12,7 @@ const usersRouter = require("./routes/users");
 const cardsRouter = require("./routes/cards");
 const { createUser } = require("./controllers/users");
 const { login } = require("./controllers/login");
+const auth = require("./middlewares/auth");
 
 // Middlewares globais
 app.use(express.json());
@@ -32,8 +33,8 @@ app.post("/signup", createUser);
 app.post("/signin", login);
 
 // Rotas protegidas
-app.use("/users", usersRouter);
-app.use("/cards", cardsRouter);
+app.use("/users", auth, usersRouter);
+app.use("/cards", auth, cardsRouter);
 
 // Rota de crash test (para simular falha do servidor)
 app.get("/crash-test", () => {
