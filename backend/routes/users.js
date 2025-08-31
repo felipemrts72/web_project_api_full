@@ -23,16 +23,10 @@ const validate = (schema) => (req, res, next) => {
   next();
 };
 
-router.get("/", auth, getUsers);
-router.get("/me", auth, getCurrentUser);
-router.get("/:id", auth, getUserById);
-router.post("/", validate(createUserSchema), createUser);
-router.patch("/me", auth, userUpdate);
-router.patch(
-  "/me/avatar",
-  auth,
-  validate(updateAvatarSchema),
-  userAvatarUpdate,
-);
+router.get("/", getUsers);
+router.get("/me", getCurrentUser);
+router.get("/:id", getUserById);
+router.patch("/me", userUpdate);
+router.patch("/me/avatar", validate(updateAvatarSchema), userAvatarUpdate);
 
 module.exports = router;
