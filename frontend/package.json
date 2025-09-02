@@ -4,12 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --open",
+    "dev": "vite --open --port5173",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "deploy": "npm run build && scp -r ./dist/* felipemenezes630@aroundus-project.mooo.com:/home/felipemenezes630/frontend"
-
   },
   "dependencies": {
     "react": "^19.0.0",

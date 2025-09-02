@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://se-register-api.en.tripleten-services.com/v1';
+export const BASE_URL = 'http://localhost:3000';
 
 async function getData(url, options) {
   const res = await fetch(url, options);
