@@ -20,19 +20,22 @@ const userSchema = new mongoose.Schema({
   },
   name: {
     type: String,
+    default: "Jacques Cousteau",
     minlength: 2,
     maxlength: 30,
-    default: "Jacques Cousteau", // valor padrão
+    default: "Jacques Cousteau",
   },
   about: {
     type: String,
+    default: "Explorer",
     minlength: 2,
     maxlength: 30,
-    default: "Explorer", // valor padrão
+    default: "Explorer",
   },
   avatar: {
     type: String,
-    default: "https://pictures.s3.your-default-avatar.jpg", // valor padrão
+    default:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/resources/moved_avatar_1604080799.jpg",
     validate: {
       validator: (v) => urlRegex.test(v),
       message: (err) => `${err} não é um link de avatar válido.`,
