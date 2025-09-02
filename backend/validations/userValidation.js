@@ -7,15 +7,15 @@ const validateURL = (value, helpers) => {
 };
 
 const createUserSchema = Joi.object({
-  name: Joi.string().min(2).max(30).required().messages({
+  name: Joi.string().min(2).max(30).optional().messages({
     "string.min": "O nome deve ter pelo menos 2 caracteres",
     "string.max": "O nome deve ter no máximo 30 caracteres",
   }),
-  about: Joi.string().min(2).max(30).required().messages({
+  about: Joi.string().min(2).max(30).optional().messages({
     "string.min": "O campo 'sobre' deve ter pelo menos 2 caracteres",
     "string.max": "O campo 'sobre' deve ter no máximo 30 caracteres",
   }),
-  avatar: Joi.string().required().custom(validateURL).messages({
+  avatar: Joi.string().optional().custom(validateURL).messages({
     "string.pattern.base": "O link do avatar deve ser uma URL válida",
   }),
   email: Joi.string().email().required().messages({
