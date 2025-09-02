@@ -1,0 +1,24 @@
+.login {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.login__title {
+  text-align: center;
+  font-size: 24px;
+}
+.login__signin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.login__text {
+  margin-right: 12px;
+}
+
+.login__login-link {
+  color: white;
+  text-decoration: none;
+}
