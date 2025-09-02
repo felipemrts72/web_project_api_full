@@ -17,11 +17,9 @@ module.exports.login = async (req, res, next) => {
       return res.status(401).send({ message: "Email ou senha incorretos" });
     }
 
-    const token = jwt.sign(
-      { _id: user._id },
-      process.env.JWT_SECRET || "dev-secret",
-      { expiresIn: process.env.JWT_EXPIRES_IN || "7d" },
-    );
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRES_IN,
+    });
 
     res.send({ token });
   } catch (err) {

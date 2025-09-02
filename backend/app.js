@@ -1,10 +1,12 @@
+// app.js
+require("dotenv").config(); // <- carregando variáveis do .env
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const errorHandler = require("./middlewares/errorHandler");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, MONGODB_URL } = process.env; // pega a URL do MongoDB do .env
 const app = express();
 
 // Importar routers e controllers
@@ -20,8 +22,11 @@ app.use(cors());
 
 // Conexão com MongoDB
 mongoose
-  .connect("mongodb://localhost:27017/aroundb")
-  .then(() => console.log("Conexão com MongoDB estabelecida com sucesso!"))
+  .connect(MONGODB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Conexão com MongoDB estabelecida com sucesso! 🚀"))
   .catch((err) => console.error("Erro ao conectar ao MongoDB:", err.message));
 
 // Logger de requisições
@@ -57,5 +62,5 @@ app.use(errorHandler);
 
 // Inicia o servidor
 app.listen(PORT, () => {
-  console.log(`App listening at port ${PORT}`);
+  console.log(`App listening at port ${PORT} 🚀`);
 });
