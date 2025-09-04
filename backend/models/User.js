@@ -16,18 +16,16 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    select: false, // impede retorno do hash por padrão
+    select: false,
   },
   name: {
     type: String,
-    default: "Jacques Cousteau",
     minlength: 2,
     maxlength: 30,
     default: "Jacques Cousteau",
   },
   about: {
     type: String,
-    default: "Explorer",
     minlength: 2,
     maxlength: 30,
     default: "Explorer",
@@ -38,11 +36,11 @@ const userSchema = new mongoose.Schema({
       "https://practicum-content.s3.us-west-1.amazonaws.com/resources/moved_avatar_1604080799.jpg",
     validate: {
       validator: (v) => urlRegex.test(v),
-      message: (err) => `${err} não é um link de avatar válido.`,
+      message: "Avatar deve ser uma URL válida",
     },
   },
 });
 
-const User = mongoose.model("user", userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = { User, urlRegex };

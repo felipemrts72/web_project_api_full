@@ -1,11 +1,6 @@
 const bcrypt = require("bcryptjs");
 const { User } = require("../models/User");
-const {
-  createUserSchema,
-  updateAvatarSchema,
-} = require("../validations/userValidation");
 
-// GET todos os usuários
 module.exports.getUsers = async (req, res, next) => {
   try {
     const users = await User.find({});
@@ -15,31 +10,23 @@ module.exports.getUsers = async (req, res, next) => {
   }
 };
 
-// GET usuário por ID
 module.exports.getUserById = async (req, res, next) => {
-  const { id } = req.params;
   try {
-    const user = await User.findById(id).orFail();
+    const user = await User.findById(req.params.id).orFail();
     res.json(user);
   } catch (err) {
+    err.statusCode = 404;
     err.message = "Usuário inexistente!";
     next(err);
   }
 };
 
-// POST criar usuário
 module.exports.createUser = async (req, res, next) => {
   try {
-    // Valida os dados de entrada com Joi
-    const { error, value } = createUserSchema.validate(req.body);
-    if (error) {
-      error.name = "ValidationError";
-      throw error;
-    }
+    const {
+      name, about, avatar, email, password,
+    } = req.body;
 
-    const { name, about, avatar, email, password } = value;
-
-    // Verifica se o e-mail já existe
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res
@@ -60,38 +47,28 @@ module.exports.createUser = async (req, res, next) => {
     const userData = user.toObject();
     delete userData.password;
 
-    res.status(201).json({ data: userData });
+    return res.status(201).json({ data: userData });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
-// GET dados do usuário logado
 module.exports.getCurrentUser = async (req, res, next) => {
-  const id = req.user._id;
   try {
-    const user = await User.findById(id).orFail();
+    const user = await User.findById(req.user._id).orFail();
     res.json(user);
   } catch (err) {
+    err.statusCode = 404;
     err.message = "Usuário inexistente!";
     next(err);
   }
 };
 
-// PATCH atualizar nome e about do usuário logado
 module.exports.userUpdate = async (req, res, next) => {
-  const id = req.user._id;
   try {
     const { name, about } = req.body;
-
-    if (!name || !about) {
-      const error = new Error("Campos obrigatórios ausentes");
-      error.name = "ValidationError";
-      throw error;
-    }
-
     const updatedUser = await User.findByIdAndUpdate(
-      id,
+      req.user._id,
       { name, about },
       { new: true, runValidators: true },
     );
@@ -102,17 +79,11 @@ module.exports.userUpdate = async (req, res, next) => {
 };
 
 module.exports.userAvatarUpdate = async (req, res, next) => {
-  const id = req.user._id;
   try {
-    const { error, value } = updateAvatarSchema.validate(req.body);
-    if (error) {
-      error.name = "ValidationError";
-      throw error;
-    }
-
+    const { avatar } = req.body;
     const updatedUser = await User.findByIdAndUpdate(
-      id,
-      { avatar: value.avatar },
+      req.user._id,
+      { avatar },
       { new: true, runValidators: true },
     );
     res.json(updatedUser);

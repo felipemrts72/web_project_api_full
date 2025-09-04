@@ -11,13 +11,15 @@ import { checkToken } from '../utils/auth';
 function App() {
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null); // ⚡ novo state
 
   useEffect(() => {
     async function handleCheckToken() {
       const jwt = localStorage.getItem('jwt');
       if (jwt) {
         try {
-          await checkToken(jwt);
+          const userData = await checkToken(jwt); // retorna { _id, name, email, avatar, ... }
+          setCurrentUser(userData); // ⚡ salva o usuário
           setLoggedIn(true);
           navigate('/');
         } catch (error) {
@@ -31,30 +33,38 @@ function App() {
 
   function handleLogout() {
     localStorage.removeItem('jwt');
-    localStorage.removeItem('userEmail'); // se você salvou o email
     setLoggedIn(false);
+    setCurrentUser(null); // ⚡ limpar usuário
     navigate('/login');
   }
 
   return (
-    <>
-      <div className="page">
-        <Header handleLogout={handleLogout} loggedIn={loggedIn} />
+    <div className="page">
+      <Header handleLogout={handleLogout} loggedIn={loggedIn} />
 
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute loggedIn={loggedIn}>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
-        </Routes>
-      </div>
-    </>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute loggedIn={loggedIn}>
+              {currentUser && (
+                <Home
+                  currentUser={currentUser}
+                  setCurrentUser={setCurrentUser}
+                />
+              )}
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="/login"
+          element={
+            <Login setLoggedIn={setLoggedIn} setCurrentUser={setCurrentUser} />
+          }
+        />
+      </Routes>
+    </div>
   );
 }
 

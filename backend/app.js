@@ -1,12 +1,11 @@
-// app.js
-require("dotenv").config(); // <- carregando variáveis do .env
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const errorHandler = require("./middlewares/errorHandler");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 
-const { PORT = 3000, MONGODB_URL } = process.env; // pega a URL do MongoDB do .env
+const { PORT = 3000, MONGODB_URL } = process.env;
 const app = express();
 
 // Importar routers e controllers

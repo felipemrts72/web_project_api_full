@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { authorize } from '../../utils/auth';
+import { api } from '../../utils/api';
 import InfoToolTip from '../InfoToolTip/InfoToolTip';
 
-function Login({ setLoggedIn }) {
+function Login({ setLoggedIn, setCurrentUser }) {
   const [tooltipOpen, setToolTipOpen] = useState(false);
   const [tooltipSuccess, setToolTipSuccess] = useState(false);
   const [tooltipMessage, setToolTipMessage] = useState('');
@@ -29,16 +30,20 @@ function Login({ setLoggedIn }) {
         localStorage.setItem('jwt', userData.token);
         localStorage.setItem('userEmail', email);
         setLoggedIn(true);
+
+        // Pegar dados do usuário logado
+        const userInfo = await api.getData('/users/me');
+        setCurrentUser(userInfo);
+
+        setToolTipSuccess(true);
+        setToolTipMessage('Login realizado com sucesso!');
+        setToolTipOpen(true);
+
+        setTimeout(() => {
+          setToolTipOpen(false);
+          navigate('/');
+        }, 1500);
       }
-
-      setToolTipSuccess(true);
-      setToolTipMessage('Login realizado com sucesso!');
-      setToolTipOpen(true);
-
-      setTimeout(() => {
-        setToolTipOpen(false);
-        navigate('/');
-      }, 1500);
     } catch (status) {
       console.error(`ERROR [LOGIN]: Código ${status}`);
 
@@ -51,6 +56,7 @@ function Login({ setLoggedIn }) {
       setToolTipOpen(true);
     }
   }
+
   return (
     <div className="login">
       <h3 className="login__title">Entrar</h3>

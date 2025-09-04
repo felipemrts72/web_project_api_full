@@ -21,8 +21,8 @@ module.exports.login = async (req, res, next) => {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
 
-    res.send({ token });
+    return res.send({ token });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };

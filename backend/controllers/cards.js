@@ -59,8 +59,8 @@ module.exports.deleteCard = async (req, res, next) => {
 
 // PUT like card
 module.exports.likeCard = async (req, res, next) => {
-  const cardId = req.params.cardId;
-  const userId = req.user._id;
+  const { cardId } = req.params;
+  const userId = req.user._id.toString();
 
   try {
     const card = await Card.findById(cardId).orFail(() => {
@@ -68,14 +68,11 @@ module.exports.likeCard = async (req, res, next) => {
       err.name = "NotFound";
       throw err;
     });
-
-    if (card.likes.includes(userId)) {
-      const err = new Error("Você já curtiu este cartão");
-      err.name = "BadRequest";
-      throw err;
+    // error
+    if (!card.likes.includes(userId)) {
+      card.likes.push(userId);
     }
 
-    card.likes.addToSet(userId);
     const updatedCard = await card.save();
     res.json(updatedCard);
   } catch (err) {
@@ -85,7 +82,7 @@ module.exports.likeCard = async (req, res, next) => {
 
 // DELETE dislike card
 module.exports.dislikeCard = async (req, res, next) => {
-  const cardId = req.params.cardId;
+  const { cardId } = req.params;
   const userId = req.user._id;
 
   try {
@@ -95,13 +92,8 @@ module.exports.dislikeCard = async (req, res, next) => {
       throw err;
     });
 
-    if (!card.likes.includes(userId)) {
-      const err = new Error("Você ainda não curtiu este cartão");
-      err.name = "BadRequest";
-      throw err;
-    }
+    card.likes = card.likes.filter((id) => id.toString() !== userId);
 
-    card.likes.pull(userId);
     const updatedCard = await card.save();
     res.json(updatedCard);
   } catch (err) {

@@ -10,9 +10,9 @@ module.exports = (req, res, next) => {
   const token = authorization.replace("Bearer ", "");
 
   try {
-    const payload = jwt.verify(token, "SECRET_DEV");
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
     req.user = payload;
-    next();
+    return next();
   } catch (err) {
     return res.status(401).send({ message: "Token inválido" });
   }

@@ -1,50 +1,50 @@
+import { useContext } from 'react';
+import { CurrentUserContext } from '../../../../../../contexts/CurrentUserContext';
 import ImagePopup from '../ImagePopup/ImagePopup';
 
-export default function Card(props) {
-  const { name, link, isLiked } = props.card;
-  const { card, handleOpenPopup, onCardLike, onCardDelete } = props;
-  const imageComponent = {
-    title: false,
-    children: <ImagePopup card={props.card} />,
-  };
+export default function Card({
+  card,
+  handleOpenPopup,
+  onCardLike,
+  onCardDelete,
+}) {
+  const { currentUser } = useContext(CurrentUserContext);
+
+  const isLiked = card.likes.some((id) => id.toString() === currentUser?._id);
 
   const cardLikeButtonClassName = `card__like-button ${
     isLiked ? 'card__like-button_is-active' : ''
   }`;
 
-  const handleLikeClick = (card) => {
+  const handleLikeClick = () => {
     onCardLike(card);
   };
+  const handleDeleteClick = () => onCardDelete(card);
 
-  const handleDeleteClick = (card) => {
-    onCardDelete(card);
+  const imageComponent = {
+    title: false,
+    children: <ImagePopup card={card} />,
   };
 
   return (
-    <li className="cards__item" key={props._id}>
+    <li className="cards__item" key={card._id}>
       <img
         alt="Apagar cartão"
         className="cards__trash"
-        onClick={() => {
-          handleDeleteClick(card);
-        }}
+        onClick={handleDeleteClick}
       />
       <img
-        src={link}
-        alt={`Foto do cartão, que mostra o ${name}`}
+        src={card.link}
+        alt={`Foto do cartão, que mostra o ${card.name}`}
         className="cards__image"
-        onClick={() => {
-          handleOpenPopup(imageComponent);
-        }}
+        onClick={() => handleOpenPopup(imageComponent)}
       />
       <div className="cards__desc">
-        <h2 className="cards__title">{name}</h2>
+        <h2 className="cards__title">{card.name}</h2>
         <button
           className={cardLikeButtonClassName}
           alt="Curtir cartão"
-          onClick={() => {
-            handleLikeClick(card);
-          }}
+          onClick={handleLikeClick}
         />
       </div>
     </li>

@@ -3,13 +3,13 @@ const ERROR_CODE_FORBIDDEN = 403;
 const ERROR_CODE_NOT_FOUND = 404;
 const ERROR_CODE_SERVER = 500;
 
-function errorHandler(err, req, res, next) {
+function errorHandler(err, req, res) {
   console.error(err.message);
 
   if (
-    err.name === "ValidationError" ||
-    err.name === "CastError" ||
-    err.name === "BadRequest"
+    err.name === "ValidationError"
+    || err.name === "CastError"
+    || err.name === "BadRequest"
   ) {
     return res.status(ERROR_CODE_BAD_REQUEST).send({
       message: err.message || "Dados inválidos.",
@@ -28,7 +28,9 @@ function errorHandler(err, req, res, next) {
     });
   }
 
-  res.status(ERROR_CODE_SERVER).send({ message: "Erro interno do servidor." });
+  return res
+    .status(ERROR_CODE_SERVER)
+    .send({ message: "Erro interno do servidor." });
 }
 
 module.exports = errorHandler;
