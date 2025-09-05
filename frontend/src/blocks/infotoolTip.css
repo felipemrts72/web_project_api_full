@@ -35,6 +35,23 @@
   line-height: 22px;
 }
 
+.tooltip-close-btn {
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  width: auto;
+  align-self: center;
+}
+
+.tooltip-close-btn:hover {
+  background: #d32f2f;
+}
+
 .tooltip-overlay {
   position: fixed;
   top: 0;

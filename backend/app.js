@@ -25,7 +25,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("Conexão com MongoDB estabelecida com sucesso! 🚀"))
+  .then(() => console.log("Conexão com MongoDB estabelecida com sucesso!"))
   .catch((err) => console.error("Erro ao conectar ao MongoDB:", err.message));
 
 // Logger de requisições
@@ -61,5 +61,5 @@ app.use(errorHandler);
 
 // Inicia o servidor
 app.listen(PORT, () => {
-  console.log(`App listening at port ${PORT} 🚀`);
+  console.log(`App listening at port ${PORT} `);
 });

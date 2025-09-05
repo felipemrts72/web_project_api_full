@@ -1,8 +1,9 @@
 export default function Popup(props) {
   const { onClose, title, children } = props;
+
   return (
     <div className="popup" onClick={onClose}>
-      <div className="popup__content">
+      <div className="popup__content" onClick={(e) => e.stopPropagation()}>
         <button
           aria-label="Close modal"
           className={`popup__close ${
@@ -14,7 +15,7 @@ export default function Popup(props) {
         <div
           className={`${title ? 'popup__block' : 'popup__block_content_image'}`}
         >
-          <h3 className="popup__title">{title}</h3>
+          {title && <h3 className="popup__title">{title}</h3>}
           {children}
         </div>
       </div>
