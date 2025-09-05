@@ -1,7 +1,7 @@
 🃏 Web Project Fullstack – React + Node.js + MongoDB
 🌟 Descrição
 
-Projeto web fullstack com frontend em React + Vite e backend em Node.js/Express, consumindo uma API RESTful integrada ao MongoDB.
+Projeto web fullstack com frontend em React + Vite e backend em Node.js/Express, consumindo uma API REST integrada ao MongoDB.
 
 🔑 Funcionalidades principais:
 
