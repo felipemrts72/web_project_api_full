@@ -71,5 +71,5 @@ class Api {
 }
 
 export const api = new Api({
-  url: 'http://localhost:3000', // 👉 agora usa o seu backend
+  url: import.meta.env.VITE_API_BASE_URL,
 });

@@ -15,7 +15,7 @@ function InfoToolTip({ isOpen, onClose, isSuccess, message }) {
           <p className="tooltip-message">{message}</p>
         </div>
       </div>
-      <div className="tooltip-overlay" onClick={onClose} />
+      <div className="tooltip-overlay" />
     </>
   );
 }
