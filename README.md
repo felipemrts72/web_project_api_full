@@ -1,10 +1,9 @@
 🃏 Web Project Fullstack – React + Node.js + MongoDB
-
 🌟 Descrição
 
-Projeto web fullstack com frontend em React + Vite e backend em Node.js/Express, consumindo uma API RESTful com MongoDB.
+Projeto web fullstack com frontend em React + Vite e backend em Node.js/Express, consumindo uma API RESTful integrada ao MongoDB.
 
-Funcionalidades principais:
+🔑 Funcionalidades principais:
 
 Cadastro/login de usuários com JWT
 
@@ -16,17 +15,29 @@ Popups interativos para cards e edição de perfil
 
 Estado reativo no frontend (adicionar, deletar, curtir sem recarregar a página)
 
+👉 Acesse em produção: https://www.aroundus-project.mooo.com
+
 🖥 Tecnologias
 
-Frontend: React, Vite, JSX, CSS Modules, Context API
+Frontend
 
-Backend: Node.js, Express, Mongoose, MongoDB
+React + Vite
 
-Autenticação: JWT
+JSX e CSS Modules
 
-Validação: validator
+Context API
 
-Outros: fetch API, async/await, ES Modules
+Fetch API + async/await
+
+Backend
+
+Node.js + Express
+
+MongoDB + Mongoose
+
+JWT para autenticação
+
+Validator para validação de dados
 
 ⚡ Funcionalidades
 Frontend
@@ -39,9 +50,7 @@ Curtir e descurtir cards (sincronizado com backend)
 
 Popups para visualização de imagem, edição de perfil e avatar
 
-Backend
-
-Endpoints principais:
+Backend – Endpoints principais
 
 GET /users/me – dados do usuário atual
 
@@ -59,51 +68,26 @@ PUT /cards/:id/likes – curtir
 
 DELETE /cards/:id/likes – descurtir
 
-Protegido com JWT
+🔒 Todos os endpoints protegidos com JWT
+⚙️ Validação e tratamento de erros implementados
 
-Validação e tratamento de erros
-
-Banco de Dados
-
-MongoDB
+Banco de Dados – MongoDB
 
 Collections:
 
-users – campos: name, about, avatar, email, password
+users → name, about, avatar, email, password
 
-cards – campos: name, link, owner, likes, createdAt
+cards → name, link, owner, likes, createdAt
 
 Cada card pertence a um usuário (owner)
+Likes são armazenados como arrays de user.\_id
 
-Likes são arrays de user.\_id
-
-📂 Estrutura do Projeto
-web_project/
-├── backend/
-│ ├── controllers/
-│ ├── middlewares/
-│ ├── models/
-│ ├── routes/
-│ ├── app.js
-│ ├── index.js
-│ └── package.json
-└── frontend/
-├── src/
-│ ├── components/
-│ ├── contexts/
-│ ├── utils/
-│ ├── App.jsx
-│ ├── index.jsx
-│ └── styles/
-├── package.json
-└── vite.config.js
-
-🚀 Como rodar
+🚀 Como rodar localmente
 Backend
 cd backend
 npm install # instala dependências
 npm run dev # inicia servidor com nodemon
-npm start # iniciar em produção
+npm start # inicia em produção
 
 Frontend
 cd frontend
@@ -111,32 +95,38 @@ npm install # instala dependências
 npm run dev # inicia Vite na porta 5173
 npm run build # build de produção
 
-Acesse o frontend em: http://localhost:5173
+Frontend disponível em: http://localhost:5173
 
 🔧 Configuração
 
-MongoDB: configure MONGO_URI no backend
+No backend:
 
-JWT: configure JWT_SECRET no backend
+MONGO_URI → conexão com banco de dados
 
-CORS: habilite no backend para permitir requisições do frontend
+JWT_SECRET → chave para autenticação
+
+CORS habilitado para permitir requisições do frontend
+
+📸 Prints da Aplicação
+
+Login
+
+![Login](./assests/Login.png)
+
+Register
+
+![Register](./assests/Registro.png)
+
+Tela principal
+
+![Tela principal](./assests/Home.png)
+
+Adicionar cartões
+
+![Adicionar cartões](./assests/Card.png)
 
 💡 Observações
 
-Cards criados por outros usuários não podem ser deletados
+- Usuários só podem deletar seus próprios cards
 
-Likes/deslikes atualizam a interface imediatamente
-
-Todos os endpoints sensíveis são protegidos por JWT
-
-Cards são adicionados no início da lista e carregados ordenados por data (createdAt)
-
-🎨 Extras
-
-Você pode melhorar ainda mais o README adicionando:
-
-GIFs mostrando a interface do projeto
-
-Screenshots de popups, cards e perfil
-
-Badges de cobertura de testes ou CI/CD
+- Likes/deslikes atualizam em tempo real no frontend
