@@ -29,12 +29,9 @@
   cursor: pointer;
 }
 .content__profile-edit {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+  position: relative;
+  width: 450px;
   margin: 0 auto 0 30px;
-  object-fit: contain;
-  box-sizing: border-box;
 }
 .content__wrap {
   display: flex;
@@ -66,14 +63,14 @@
 }
 
 .content__edit-button {
-  max-width: 24px;
-  width: 100%;
-  margin: 15px 0 0 10px;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #fff;
   cursor: pointer;
+  position: absolute;
+  top: 15%;
+  right: 0;
   background: url(../images/Edit_Button.png);
-  padding: 0;
-  border: none;
-  background-repeat: no-repeat;
 }
 
 .content__edit-button:hover {
